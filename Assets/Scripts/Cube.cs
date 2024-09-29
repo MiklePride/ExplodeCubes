@@ -1,20 +1,20 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody))]
 public class Cube : MonoBehaviour
 {
-    [SerializeField] Cube _prefab;
+    [SerializeField] private Cube _prefab;
 
     private MeshRenderer _meshRenderer;
     private Rigidbody _rigidbody;
-    private Detonator _detonator;
+    private int _chanceSplit = 100;
+
+    public int ChanceSplit => _chanceSplit;
 
     private void Awake()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
         _rigidbody = GetComponent<Rigidbody>();
-        _detonator = new Detonator();
     }
 
     private void SetRandomColor()
@@ -25,16 +25,11 @@ public class Cube : MonoBehaviour
         _meshRenderer.material.color = new Color(Random.Range(minValue, maxValue), Random.Range(minValue, maxValue), Random.Range(minValue, maxValue));
     }
 
-    public void Init(Vector3 size)
+    public void Init(Vector3 size, int splitChance)
     {
         transform.localScale = size;
+        _chanceSplit = splitChance;
         SetRandomColor();
-    }
-
-    public void Explode(List<Cube> cubes)
-    {
-        _detonator.Detonate(transform.position, cubes);
-        Destroy(gameObject);
     }
 
     public void AddExplosionForce(float force, float radius, Vector3 pointOfExplosion)

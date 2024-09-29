@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class MouseRaycastHandler
 {
-    [SerializeField] private LayerMask _layerMask;
-
+    private LayerMask _layerMask;
     private Camera _camera;
 
     public MouseRaycastHandler(Camera camera, LayerMask layerMask)
@@ -17,15 +16,15 @@ public class MouseRaycastHandler
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         float maxDistance = 100;
-        bool hasCubeBeenReceived = false;
         cube = null;
 
         if (Physics.Raycast(ray, out hit, maxDistance, _layerMask))
         {
             cube = hit.collider.GetComponent<Cube>();
-            hasCubeBeenReceived = true;
+
+            return true;
         }
 
-        return hasCubeBeenReceived;
+        return false;
     }
 }
