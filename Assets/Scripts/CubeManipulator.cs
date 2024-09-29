@@ -7,12 +7,12 @@ public class CubeManipulator : MonoBehaviour
     [SerializeField] private LayerMask _layerMask;
 
     private MouseRaycastHandler _mouseRaycastHandler;
-    private int _splitChance = 100;
-    private int _amountOfChanceReduction = 20;
+    private Detonator _detonator;
 
     private void Awake()
     {
         _mouseRaycastHandler = new MouseRaycastHandler(Camera.main, _layerMask);
+        _detonator = new Detonator();
     }
 
     private void Update()
@@ -32,27 +32,20 @@ public class CubeManipulator : MonoBehaviour
 
     private void TryToSplit(Cube cube)
     {
-        if (_splitChance > 0)
+        if (cube.ChanceSplit > 0)
         {
             int minChance = 0;
             int maxChance = 100;
             int resultChance = Random.Range(minChance, maxChance);
             List<Cube> cubes = new List<Cube>();
 
-            if (resultChance < _splitChance)
+            if (resultChance < cube.ChanceSplit)
             {
-                cubes = _spawner.Spawn(cube.transform.position, cube.transform.localScale);
-                cube.Explode(cubes);
-                _splitChance -= _amountOfChanceReduction;
-            }
-            else
-            {
-                Destroy(cube.gameObject);
+                cubes = _spawner.Spawn(cube.transform.position, cube.transform.localScale, cube.ChanceSplit);
+                _detonator.Detonate(cube.transform.position, cubes);
             }
         }
-        else
-        {
-            Destroy(cube.gameObject);
-        }
+
+        Destroy(cube.gameObject);
     }
 }

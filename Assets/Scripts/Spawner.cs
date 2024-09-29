@@ -9,8 +9,9 @@ public class Spawner : MonoBehaviour
     private int _minCubes = 2;
     private int _maxCubes = 6;
     float _radiusOfCreation = 6f;
+    private int _amountOfChanceReduction = 20;
 
-    public List<Cube> Spawn(Vector3 centerSpawnPoint, Vector3 size)
+    public List<Cube> Spawn(Vector3 centerSpawnPoint, Vector3 size, int splitChance)
     {
         int targetCubesCount = Random.Range(_minCubes, _maxCubes + 1);
         int currentCubes = 0;
@@ -19,9 +20,11 @@ public class Spawner : MonoBehaviour
         while (targetCubesCount > currentCubes)
         {
             Vector3 randomPoint = centerSpawnPoint + Random.insideUnitSphere * _radiusOfCreation;
+
             Cube cube = Instantiate(_prefab, randomPoint, Quaternion.identity);
-            cube.Init(size / _divisionRatio);
+            cube.Init(size / _divisionRatio, splitChance - _amountOfChanceReduction);
             cubes.Add(cube);
+
             currentCubes++;
         }
 
