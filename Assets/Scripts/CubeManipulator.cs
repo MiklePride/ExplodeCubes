@@ -44,6 +44,10 @@ public class CubeManipulator : MonoBehaviour
                 cubes = _spawner.Spawn(cube.transform.position, cube.transform.localScale, cube.ChanceSplit);
                 _detonator.Detonate(cube.transform.position, cubes);
             }
+            else
+            {
+                _detonator.DetonateInsideArea(cube.transform.position, cube.transform.localScale);
+            }
         }
 
         Destroy(cube.gameObject);
